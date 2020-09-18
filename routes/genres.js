@@ -75,6 +75,15 @@ router.put("/:id", async (requst, response) => {
   response.send(genre);
 });
 
+router.delete("/:id", async (request, response) => {
+  const genre = await Genre.findByIdAndRemove(request.params.id);
+
+  if (!genre)
+    return response.status(404).send("The genre with the given id not found");
+
+  response.send(genre);
+});
+
 function validateGenre(genre) {
   const schema = {
     name: Joi.string().min(3).required(),
