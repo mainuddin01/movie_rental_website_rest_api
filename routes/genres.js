@@ -24,3 +24,9 @@ const Genre = mongoose.model(
     },
   })
 );
+
+router.get("/", async (request, response) => {
+  const genres = await Genre.find().sort("name");
+
+  response.send(genres);
+});
