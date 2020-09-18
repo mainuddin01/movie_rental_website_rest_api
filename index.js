@@ -13,6 +13,8 @@ mongoose
     console.log("Failed to connect mongodb...");
   });
 
+app.use(express.json());
+
 app.use("/api/genres", genres);
 
 const port = process.env.PORT || 5000;

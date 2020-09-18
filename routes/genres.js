@@ -56,7 +56,7 @@ router.get("/:id", async (request, response) => {
   response.send(genre);
 });
 
-router.put("/:id", async (requst, response) => {
+router.put("/:id", async (request, response) => {
   const { error } = validateGenre(request.body);
 
   if (error) return response.status(400).send(error.details[0].message);
@@ -91,3 +91,5 @@ function validateGenre(genre) {
 
   return Joi.validate(genre, schema);
 }
+
+module.exports = router;
