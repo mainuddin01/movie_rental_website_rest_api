@@ -1,3 +1,4 @@
+const config = require("config");
 const express = require("express");
 const mongoose = require("mongoose");
 const Joi = require("joi");
@@ -8,6 +9,14 @@ const movies = require("./routes/movies");
 const rentals = require("./routes/rentals");
 const users = require("./routes/users");
 const auth = require("./routes/auth");
+
+if (!config.get("jwtPrivateKey")) {
+  console.log(
+    "FATAL ERROR: jwtPrivateKey not found. set this value in widows 'set jwtPrivateKey=yourSecretKey'"
+  );
+
+  process.exit(1); // here all other numbers as arguments except 0 will be treated as error
+}
 
 const app = express();
 
