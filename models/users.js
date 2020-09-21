@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const Jio = require("jio");
+const Joi = require("joi");
 
 const User = mongoose.model(
   "User",
@@ -28,12 +28,12 @@ const User = mongoose.model(
 
 function validateUser(user) {
   const schema = {
-    name: Jio.string().min(5).max(50).required(),
-    email: Jio.string().min(5).max(255).required().email(),
-    password: Jio.string().min(5).max(255).required(),
+    name: Joi.string().min(5).max(50).required(),
+    email: Joi.string().min(5).max(255).required().email(),
+    password: Joi.string().min(5).max(255).required(),
   };
 
-  return Jio.validate(user, schema);
+  return Joi.validate(user, schema);
 }
 
 module.exports.User = User;
