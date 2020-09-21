@@ -70,4 +70,13 @@ router.post("/", async (request, response) => {
   }
 });
 
+router.get("/:id", async (request, response) => {
+  const rental = await Rental.findById(request.params.id);
+
+  if (!rental)
+    return response.status(404).send("The rental with given id not found");
+
+  response.send(rental);
+});
+
 module.exports = router;
