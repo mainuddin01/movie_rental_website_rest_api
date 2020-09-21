@@ -13,13 +13,13 @@ router.post("/", async (request, response) => {
 
   if (error) return response.status(400).send(error.details[0].message);
 
-  let customer = new Customer({
+  const customer = new Customer({
     name: request.body.name,
     phone: request.body.phone,
     isGold: request.body.isGold,
   });
 
-  customer = await customer.save();
+  await customer.save();
 
   response.send(customer);
 });
