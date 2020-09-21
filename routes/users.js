@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const _ = require("lodash");
 const { User, validate } = require("../models/users");
 
 router.post("/", async (request, response) => {
@@ -10,15 +11,23 @@ router.post("/", async (request, response) => {
   if (user)
     return response.status(400).send("User with this email already registered");
 
-  user = new User({
-    name: request.body.name,
-    email: request.body.email,
-    password: request.body.password,
-  });
+  //   user = new User({
+  //     name: request.body.name,
+  //     email: request.body.email,
+  //     password: request.body.password,
+  //   });
+
+  let user = new User(_.pick(request.body, ["name", "email", "password"])); // here _.pick() will give an object with name, email, and password in it
 
   await user.save();
 
-  response.send(user);
+  //   response.send(user);
+  // response.send({
+  //     _id: user._id,
+  //     name: user.name,
+  //     email: user.email
+  // });
+  response.send(_.pick(request.body, ["_id", "name", "email"]));
 });
 
 module.exports = router;
