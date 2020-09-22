@@ -5,9 +5,13 @@ const auth = require("../middleware/auth");
 const admin = require("../middleware/admin");
 
 router.get("/", async (request, response) => {
-  const genres = await Genre.find().sort("name");
+  try {
+    const genres = await Genre.find().sort("name");
 
-  response.send(genres);
+    response.send(genres);
+  } catch (error) {
+    response.status(500).send("Something failed");
+  }
 });
 
 router.post("/", auth, async (request, response) => {
