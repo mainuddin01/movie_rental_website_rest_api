@@ -1,4 +1,5 @@
 const config = require("config");
+require("winston-mongodb");
 const express = require("express");
 const mongoose = require("mongoose");
 const winston = require("winston");
@@ -13,7 +14,12 @@ const auth = require("./routes/auth");
 const error = require("./middleware/error");
 
 // added file transport to store log on file
-winston.add(winston.transports.File, { filename: "logfile.log" });
+winston.add(winston.transports.File, { filename: "logfile.log" }); // to store logs in a file
+winston.add(winston.transports.MongoDB, { db: "mongodb://localhost/vidly" }); // to store logs in mongodb
+// winston.add(winston.transports.MongoDB, {
+//   db: "mongodb://localhost/vidly",
+//   level: "error",
+// });
 
 if (!config.get("jwtPrivateKey")) {
   console.log(
