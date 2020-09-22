@@ -21,6 +21,14 @@ winston.add(winston.transports.MongoDB, { db: "mongodb://localhost/vidly" }); //
 //   level: "error",
 // });
 
+// to handle uncaught exception (any type of unhandled exception) in our project we can do the following
+process.on("uncaughtException", (error) => {
+  console.log("UNHANDLED EXCEPTION FOUND");
+  winston.error(error.message, error);
+});
+
+// throw new Error("Errrrrrrrooooooooorrrrrrr"); // simulates an unhandled exception
+
 if (!config.get("jwtPrivateKey")) {
   console.log(
     "FATAL ERROR: jwtPrivateKey not found. set this value in widows 'set jwtPrivateKey=yourSecretKey'"
