@@ -1,4 +1,3 @@
-const config = require("config");
 const express = require("express");
 const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi); // here "joi-objectid" package returns a function and if we call that function with "Joi" class as an input then it'll return a function that can be assigned in Joi object as a method
@@ -14,15 +13,10 @@ require("./startup/routes")(app); // ./startup/routes module returns us a functi
 // db connection
 require("./startup/db")();
 
+// project / app configuration
+require("./startup/config")();
+
 // throw new Error("Errrrrrrrooooooooorrrrrrr"); // simulates an unhandled exception
-
-if (!config.get("jwtPrivateKey")) {
-  console.log(
-    "FATAL ERROR: jwtPrivateKey not found. set this value in widows 'set jwtPrivateKey=yourSecretKey'"
-  );
-
-  process.exit(1); // here all other numbers as arguments except 0 will be treated as error
-}
 
 const port = process.env.PORT || 5000;
 app.listen(5000, () => {
