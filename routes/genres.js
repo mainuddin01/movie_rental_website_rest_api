@@ -7,7 +7,8 @@ const asyncMiddleware = require("../middleware/async");
 
 router.get(
   "/",
-  asyncMiddleware(async (request, response, next) => {
+  asyncMiddleware(async (request, response) => {
+    // throw new Error("Something went wrong");
     const genres = await Genre.find().sort("name");
 
     response.send(genres);

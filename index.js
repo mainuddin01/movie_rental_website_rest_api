@@ -1,6 +1,7 @@
 const config = require("config");
 const express = require("express");
 const mongoose = require("mongoose");
+const winston = require("winston");
 const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi); // here "joi-objectid" package returns a function and if we call that function with "Joi" class as an input then it'll return a function that can be assigned in Joi object as a method
 const genres = require("./routes/genres");
@@ -10,6 +11,9 @@ const rentals = require("./routes/rentals");
 const users = require("./routes/users");
 const auth = require("./routes/auth");
 const error = require("./middleware/error");
+
+// added file transport to store log on file
+winston.add(winston.transports.File, { filename: "logfile.log" });
 
 if (!config.get("jwtPrivateKey")) {
   console.log(
