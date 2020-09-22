@@ -25,6 +25,7 @@ module.exports = function () {
 
   // another way to handle uncaughtException and unhandledRejection
   winston.handleExceptions(
+    new winston.transports.Console({ colorize: true, prettyPrint: true }), // it will log the error in console with colored version
     new winston.transports.File({ filename: "uncaughtExceptions.log" })
   );
 
