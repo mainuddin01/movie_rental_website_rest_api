@@ -4,13 +4,14 @@ const { Genre, validate } = require("../models/genres");
 const auth = require("../middleware/auth");
 const admin = require("../middleware/admin");
 
-router.get("/", async (request, response) => {
+router.get("/", async (request, response, next) => {
   try {
     const genres = await Genre.find().sort("name");
 
     response.send(genres);
   } catch (error) {
-    response.status(500).send("Something failed");
+    // response.status(500).send("Something failed");
+    next(error);
   }
 });
 
