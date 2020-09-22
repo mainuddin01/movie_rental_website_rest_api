@@ -27,6 +27,12 @@ process.on("uncaughtException", (error) => {
   winston.error(error.message, error);
 });
 
+process.on("unhandledRejection", (error) => {
+  console.log("UNHANDLED REJECTION FOUND");
+  winston.error(error.message, error);
+  process.exit(1);
+});
+
 // throw new Error("Errrrrrrrooooooooorrrrrrr"); // simulates an unhandled exception
 
 if (!config.get("jwtPrivateKey")) {
