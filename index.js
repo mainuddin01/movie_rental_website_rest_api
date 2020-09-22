@@ -22,15 +22,24 @@ winston.add(winston.transports.MongoDB, { db: "mongodb://localhost/vidly" }); //
 // });
 
 // to handle uncaught exception (any type of unhandled exception) in our project we can do the following
-process.on("uncaughtException", (error) => {
-  console.log("UNHANDLED EXCEPTION FOUND");
-  winston.error(error.message, error);
-});
+// process.on("uncaughtException", (error) => {
+//   console.log("UNHANDLED EXCEPTION FOUND");
+//   winston.error(error.message, error);
+// });
+
+// process.on("unhandledRejection", (error) => {
+//   console.log("UNHANDLED REJECTION FOUND");
+//   winston.error(error.message, error);
+//   process.exit(1);
+// });
+
+// another way to handle uncaughtException and unhandledRejection
+winston.handleExceptions(
+  new winston.transports.File({ filename: "uncaughtExceptions.log" })
+);
 
 process.on("unhandledRejection", (error) => {
-  console.log("UNHANDLED REJECTION FOUND");
-  winston.error(error.message, error);
-  process.exit(1);
+  throw error;
 });
 
 // throw new Error("Errrrrrrrooooooooorrrrrrr"); // simulates an unhandled exception
