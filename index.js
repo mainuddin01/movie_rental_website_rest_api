@@ -1,6 +1,5 @@
 const express = require("express");
-const Joi = require("joi");
-Joi.objectId = require("joi-objectid")(Joi); // here "joi-objectid" package returns a function and if we call that function with "Joi" class as an input then it'll return a function that can be assigned in Joi object as a method
+const winston = require("winston");
 
 const app = express();
 
@@ -16,9 +15,13 @@ require("./startup/db")();
 // project / app configuration
 require("./startup/config")();
 
+// validation related logic imports
+require("./startup/validation");
+
 // throw new Error("Errrrrrrrooooooooorrrrrrr"); // simulates an unhandled exception
 
 const port = process.env.PORT || 5000;
-app.listen(5000, () => {
-  console.log("Listening on port 5000");
+app.listen(port, () => {
+  // console.log(`Listening on port ${port}`);
+  winston.info(`Listening on port ${port}`);
 });
