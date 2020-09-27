@@ -1,42 +1,42 @@
 const express = require("express");
 const router = express.Router();
 const Joi = require("joi");
-const auth = require("../middleware/auth");
-const { Rental } = require("../models/rentals");
 const moment = require("moment");
+const auth = require("../middleware/auth");
+const validate = require("../middleware/validate");
+const { Rental } = require("../models/rentals");
 const { Movie } = require("../models/movies");
-const { response } = require("express");
 
-router.post("/", auth, async (request, response) => {
-  const { error } = validateReturn(request.body);
+router.post(
+  "/",
+  [auth, validate(validateReturn)],
+  async (request, response) => {
+    const rental = await Rental.findOne({
+      "customer._id": request.body.userId,
+      "movie._id": request.body.movieId,
+    });
 
-  if (error) return response.status(400).send(error.details[0].message);
+    if (!rental) return response.status(404).send("Rental not found");
 
-  const rental = await Rental.findOne({
-    "customer._id": request.body.userId,
-    "movie._id": request.body.movieId,
-  });
+    if (rental.dateReturned)
+      return response.status(400).send("Return already processed");
 
-  if (!rental) return response.status(404).send("Rental not found");
+    rental.dateReturned = new Date();
+    rental.rentalFee =
+      moment().diff(rental.dateOut, "days") * rental.movie.dailyRentalRate;
 
-  if (rental.dateReturned)
-    return response.status(400).send("Return already processed");
+    await rental.save();
 
-  rental.dateReturned = new Date();
-  rental.rentalFee =
-    moment().diff(rental.dateOut, "days") * rental.movie.dailyRentalRate;
+    await Movie.update(
+      { _id: rental.movie._id },
+      {
+        $inc: { numberInStock: 1 },
+      }
+    );
 
-  await rental.save();
-
-  await Movie.update(
-    { _id: rental.movie._id },
-    {
-      $inc: { numberInStock: 1 },
-    }
-  );
-
-  response.send(rental);
-});
+    response.send(rental);
+  }
+);
 
 function validateReturn(data) {
   const schema = {
