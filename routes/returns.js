@@ -11,10 +11,10 @@ router.post(
   "/",
   [auth, validate(validateReturn)],
   async (request, response) => {
-    const rental = await Rental.findOne({
-      "customer._id": request.body.userId,
-      "movie._id": request.body.movieId,
-    });
+    const rental = await Rental.lookup(
+      request.body.userId,
+      request.body.movieId
+    );
 
     if (!rental) return response.status(404).send("Rental not found");
 
